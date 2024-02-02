@@ -1,8 +1,14 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 
-# Create your views here.
 def homepage(req):
-    return render(req, "index.html")
+    response = JsonResponse({"message":"Homepage"})
+    return response
 
-def tweets(req):
-    return render(req, "tweets.html")
+def explore_tweets(req):
+    response = JsonResponse({"message":"Tweets explorer page"})
+    return response
+
+def get_tweets(req):
+    response = JsonResponse({"message":"Get Tweets endpoint"})
+    return response
