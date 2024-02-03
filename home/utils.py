@@ -18,7 +18,7 @@ scrap_params = {
     "filters": None, # allowed : 'nativeretweets', 'media', 'videos', 'news', 'verified', 'native_video', 'replies', 'links', 'images', 'safe', 'quote', 'pro_video'
     "exclude": None, # default : None, allowed : same as above
     "max_retries": 5, # default : 5
-    "instance": "https://nitter.privacydev.net/" # default : None
+    "instance": None # default : None
 }
 
 def get_pipelines():
@@ -101,7 +101,7 @@ def fetch_and_analyse_tweets(analysis_type,params):
       analysed_tweets = get_tweets_from_file(term)
     except: 
       analysed_tweets = []
-      
+
   return analysed_tweets
 
 def display_list(lst):
