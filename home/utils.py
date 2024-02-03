@@ -21,17 +21,21 @@ scrap_params = {
 
 def get_pipelines():
   pipelines = {}
-  pipelines["sentiment_analysis"] = pipeline(task = "sentiment-analysis",model = "cardiffnlp/twitter-roberta-base-sentiment-latest")
+  pipelines["sentiment"] = pipeline(task = "sentiment-analysis",model = "cardiffnlp/twitter-roberta-base-sentiment-latest")
+  pipelines["toxicity"] = pipeline(task = "text-classification",model = "facebook/roberta-hate-speech-dynabench-r4-target")
+  pipelines["depression"] = pipeline(task = "text-classification", model = "paulagarciaserrano/roberta-depression-detection")
+  pipelines["spam"] = pipeline(task= "text-classification",model = "mariagrandury/roberta-base-finetuned-sms-spam-detection")
+  pipelines["nsfw"] = pipeline(task = "text-classification",model = "michellejieli/NSFW_text_classifier")
   return pipelines
 
 pipelines = get_pipelines()
 
 def get_detailed_tweets_of_topic(scrap_params,scrapper):
-  try:
-    tweets = scrapper.get_tweets(**scrap_params)['tweets']
-  except :
-    print("Failed to Fetch")
-    return []
+  # try:
+  tweets = scrapper.get_tweets(**scrap_params)['tweets']
+  # except :
+  #   print("Failed to Fetch")
+  #   return []
   return tweets
 
 def extract_tweet_text(tweets):
@@ -63,16 +67,30 @@ def customize_filter_params(params):
   for key in filter_keys:
     if (key == "terms"):
       filter_params[key] = params[key]
+    elif (key == "number"):
+      filter_params[key] = int(params[key][0])
     else : 
       filter_params[key] = params[key][0]
   return filter_params
 
-def fetch_tweets_and_check_sentiments(params):
-  filter_params = customize_filter_params(params)
-  tweets_sentiments = get_tweet_texts_and_model_labels(filter_params,scrapper,pipelines["sentiment_analysis"])
-  return tweets_sentiments
+def fetch_and_analyse_tweets(analysis_type,params):
+  pipe = pipelines[analysis_type]
+  filtered_params = customize_filter_params(params)
+  analysed_tweets = get_tweet_texts_and_model_labels(filtered_params,scrapper,pipe)
+  return analysed_tweets
 
 def display_list(lst):
   for elm in lst :
     print(elm)
     print("-"*20)
+
+user_scrap_params = {
+    "username":"imVkohli",
+    "max_retries":5,
+    "instance" : None,
+}
+
+def fetch_user_info(username):
+  user_scrap_params["username"] = username
+  profile = scrapper.get_profile_info(**user_scrap_params)
+  return profile
