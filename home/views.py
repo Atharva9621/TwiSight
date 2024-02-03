@@ -12,3 +12,8 @@ def explore_tweets(req):
 def get_tweets(req):
     response = JsonResponse({"message":"Get Tweets endpoint"})
     return response
+
+def debug_view(req):
+    page_name = req.GET.get('page_name', '')
+    template_name = f'{page_name}.html'  
+    return render(req, template_name)
