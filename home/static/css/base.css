@@ -9,3 +9,20 @@ body {
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Box shadow */
     backdrop-filter: blur(4px); /* Blur effect for supporting browsers */
 }
+#canvas-container{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Place it behind other elements */
+}
+.dashboard{
+    padding: 3% 3%;
+    margin: 5%;
+}
+.tweet-box{
+    background-color: aliceblue;
+    width: 50%;
+    padding: 1%
+}

@@ -1,0 +1,98 @@
+{% extends 'base.html' %} 
+{% load static %} 
+
+{% block title %}Explore{% endblock title %}  
+
+{% block stylesheet %}
+<link rel="stylesheet" type="text/css" href="../static/css/explore.css">
+{% endblock stylesheet %}
+
+{% block body %}
+<div class="dashboard">
+    <div class="container w-[100%]">
+        <div class="h-25 headbox mx-auto text-center d-flex mb-2 flex-column justify-content-center">
+            <h3 class="m-4">Search any Hashtags Here</h3>
+            <form class="d-flex mx-auto" method="post" action="/explore-tweets/depression" role="search">
+                <input class="form-control me-3" id="hash" name="terms" type="search" placeholder="Enter hashtag" required="true"
+                    aria-label="Search">
+                <input class="btn btn-success" type="submit">
+            </form>
+        </div>
+        {% if first_visit %}
+        <div class="d-flex tweetBox flex-wrap overflow-scroll">
+            {% for tweet in tweets %}
+            <div class="w-100 d-grid card-box">
+
+                <div class="search text-center">
+                    <div class="card my-2">
+                        <div class="user d-flex flex-row">
+                            <span class="profile d-flex justify-content-center align-items-center mx-auto">
+                                <p>A</p>
+                            </span>
+                        </div>
+
+                        <div class="tweet-msg">
+                            <p class="profile-name py-2">{{tweet.user}}</p>
+                            <p class="tweet-text">{{tweet.text}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="result">
+                    <div class="card mt-2 d-flex">
+                        <h5 class="mx-auto">Analysis</h5>
+                        <div class="mx-2 w-100 d-flex justify-content-between">
+                            <p class="tag-text">Label</p>
+                            <p class="tag-text">Confidence</p>
+                        </div>
+                        <div class="mx-1 my-2 w-100 d-flex justify-content-between">
+                        {% if tweet.label == 'negative' %}
+                            <p class="res-text text-danger">☹️ Severe</p>
+                        {% elif tweet.label == 'positive' %}
+                            <p class="res-text text-success" >😍 Not Depression</p>
+                        {% else %}
+                            <p class="res-text text-warning">😐 Moderate</p>
+                        {% endif %}                            <p class="res-text">{{tweet.score}}%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% if first_visit %}
+<div class="dashboard glass-container d-flex justify-content-center flex-row">
+    <div class="d-flex justify-content-center flex-row">
+        <div class="pb-10" style="width: 50%;">
+            <canvas class="m-5" id="myPieChart" style="width: 30%; height: 30%;"></canvas>
+        </div>
+        <div class="health-box d-flex justify-content-center flex-column px-2 w-50">
+            <div class="d-flex justify-content-center flex-column text-center pb-3">
+                <h3>Tweet Dashboard</h3>
+            </div>
+            <h5 class="text-center">Diagnostics ❤️</h5>
+            <div class="metric">Positivity-score: ({{metric}}%) </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center flex-row">
+
+    </div>
+</div>
+{% endif %}
+<script>
+    var tweetData = {
+        labels: {{ labels|safe }},
+        values: {{ values|safe }}
+    };
+    {% comment %} function Search(event) {
+        event.preventDefault();
+        const inpt = document.getElementById('hash');
+        console.log(inpt.value)
+    } {% endcomment %}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="../static/js/explore.js"></script>
+{% endblock body %} 
