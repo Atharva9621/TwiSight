@@ -21,3 +21,8 @@ def get_user_info(req):
     info = fetch_user_info(username)
     response = JsonResponse({"info": info})
     return response
+
+def debug_view(req):
+    page_name = req.GET.get('page_name', '')
+    template_name = f'{page_name}.html'  
+    return render(req, template_name)
