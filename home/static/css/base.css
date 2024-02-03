@@ -26,3 +26,6 @@ body {
     width: 50%;
     padding: 1%
 }
+.bg-light{
+    background-color: blueviolet;
+}

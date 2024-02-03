@@ -13,9 +13,15 @@
     {% endblock stylesheet %}  
     <title>{% block title %}{% endblock title %}  
         !</title>
+    <style>
+      .bg-light {
+    background-color: rgba(200, 185, 220, 0.5)!important;
+    border-bottom: none;
+}
+    </style>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: rgba(200, 185, 220, 0.5);">
       <a href="./home.html" class="rounded-lg mx-2"><img src="{% static 'img/logo.png' %}" width="35px" height="35px" alt=""></a>
         <a class="navbar-brand" href="/">Innovators</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +54,11 @@
     {% block body %} 
     {% endblock body %}
     
+    <footer style="width: 100%; background-color: rgba(200, 185, 220, 0.5); color: #000000;
+    padding: 20px 0; position: fixed; bottom: 0; left: 0; display: flex; justify-content: center;">
+      <p>&copy; 2024 Your Website. All Rights Reserved.</p>
+  </footer>
+
     {% block script %}
     <script src="../static/js/gradient.js"></script>
     {% endblock script %} 
