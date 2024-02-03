@@ -1,6 +1,8 @@
 from ntscraper import Nitter
 from langid import classify
 from transformers import pipeline
+import os
+import json
 
 scrapper = Nitter()
 
@@ -31,11 +33,7 @@ def get_pipelines():
 pipelines = get_pipelines()
 
 def get_detailed_tweets_of_topic(scrap_params,scrapper):
-  # try:
   tweets = scrapper.get_tweets(**scrap_params)['tweets']
-  # except :
-  #   print("Failed to Fetch")
-  #   return []
   return tweets
 
 def extract_tweet_text(tweets):
@@ -54,11 +52,17 @@ def get_sentiments(texts,pipe):
   sentiments = pipe(texts)
   return sentiments
 
+def organize_data(texts, sentiments):
+  l = len(texts)
+  for i in range (l):
+    sentiments[i]["text"] = texts[i]
+  return sentiments
+
 def get_tweet_texts_and_model_labels(scrap_params,scrapper,pipe):
   tweet_texts = get_tweet_texts(scrap_params,scrapper)
   filtered_texts = filter_texts(tweet_texts)
   sentiments = get_sentiments(filtered_texts,pipe)
-  text_sentiments = list(zip(filtered_texts,sentiments))
+  text_sentiments = organize_data(filtered_texts,sentiments)
   return text_sentiments
 
 def customize_filter_params(params):
@@ -73,10 +77,27 @@ def customize_filter_params(params):
       filter_params[key] = params[key][0]
   return filter_params
 
+def get_tweets_from_file(term):
+  base_path = "./home/static/jsons"
+  folder_name = term
+  file_name = term + ".json"
+  file_path = os.path.join(base_path,folder_name,file_name)
+  f = open(file_path)
+  data = f.read()
+  data_dict = json.loads(data)
+  return data_dict["predictions"]
+
 def fetch_and_analyse_tweets(analysis_type,params):
   pipe = pipelines[analysis_type]
-  filtered_params = customize_filter_params(params)
-  analysed_tweets = get_tweet_texts_and_model_labels(filtered_params,scrapper,pipe)
+  analysed_tweets = []
+  try : 
+    filtered_params = customize_filter_params(params)
+    analysed_tweets = get_tweet_texts_and_model_labels(filtered_params,scrapper,pipe)
+    if(analysed_tweets == []):
+      raise NameError("Empty list")
+  except : 
+    term = params["terms"][0]
+    analysed_tweets = get_tweets_from_file(term)
   return analysed_tweets
 
 def display_list(lst):

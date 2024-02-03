@@ -13,7 +13,7 @@ def explore_tweets(req):
 def get_tweet_analysis(req,analysis_type):
     filter_params = dict(req.GET)
     tweet_analysis = fetch_and_analyse_tweets(analysis_type,filter_params)
-    response = JsonResponse({"messsage":tweet_analysis})
+    response = JsonResponse({"response":tweet_analysis})
     return response
 
 def get_user_info(req):
