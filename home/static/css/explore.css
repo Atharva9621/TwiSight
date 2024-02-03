@@ -42,7 +42,24 @@ nav{
 }
 
 form{
-    width: 50%;
+    /* width: 350px; */
+    width: 80%;
+    justify-content: space-evenly;
+    height: max-content;
+}
+
+form>input{
+    height: max-content;
+    /* width: 400px; */
+}
+
+.modal{
+    top: 30%;
+    /* left: 50%; */
+}
+
+.form-control{
+    width: 400px;
 }
 
 .tweetBox{

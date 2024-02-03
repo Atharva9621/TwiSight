@@ -76,7 +76,10 @@ def customize_filter_params(params):
       filter_params[key] = params[key]
     elif (key == "number"):
       filter_params[key] = int(params[key][0])
-    else : 
+    elif params[key][0]=='none':
+        print(key)
+        filter_params[key] = None
+    else:
       filter_params[key] = params[key][0]
   return filter_params
 
@@ -102,7 +105,7 @@ def get_sentiment_metrics(analysed_tweets, analysis):
         elif tweet['label']=='neutral':
           metric += 0.5*tweet["score"]
         else:
-          metric += 100-tweet["score"]
+          metric += 100-tweet["score"]  
       return counts, metric/(1+(counts['positive']+counts['negative']))
     elif analysis=="toxicity":
       counts = {'hate': 0, 'nothate': 0}
@@ -151,11 +154,13 @@ def fetch_and_analyse_tweets(analysis_type,params):
     analysed_tweets = get_tweet_texts_and_model_labels(filtered_params,scrapper,pipe)
     if(analysed_tweets == []):
       raise NameError("Empty list")
-  except : 
+  except Exception as e: 
+    print(e)
     term = params["terms"][0]
     try : 
       analysed_tweets = get_tweets_from_file(term)
-    except: 
+    except Exception as e: 
+      print(e) 
       analysed_tweets = []
   return analysed_tweets
 

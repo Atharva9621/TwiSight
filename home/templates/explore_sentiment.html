@@ -15,6 +15,60 @@
             <form class="d-flex mx-auto" method="post" action="/explore-tweets/sentiment" role="search">
                 <input class="form-control me-3" id="hash" name="terms" type="search" placeholder="Enter hashtag" required="true"
                     aria-label="Search">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Filters
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Filters</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="w-100 d-flex justify-content-around">
+                                    <label for="count">Count</label>
+                                    <input type="number" name="number" id="count" value="5">
+                                </div>
+                                <div class="w-100 d-flex justify-content-around">
+                                    <label for="mode">
+                                        Mode
+                                    </label>
+
+                                    <select type="text" name="mode" class="" id="mode">
+                                        <option value="hashtag" selected>Hashtag</option>
+                                        <option value="user">User</option>
+                                        <option value="term">Term</option>
+                                    </select>
+
+                                </div>
+                                <div class="w-100 d-flex justify-content-around">
+                                    <label for="filter">
+                                        filters
+                                    </label>
+
+                                    <select type="text" name="filters" class="" id="filter">
+                                        <option value="none" selected>None</option>
+                                        <option value="news">News</option>
+                                        <option value="verified">verified</option>
+                                    </select>
+
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Apply Filters</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <input class="btn btn-success" type="submit">
             </form>
         </div>
