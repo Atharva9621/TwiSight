@@ -20,7 +20,7 @@ def explore_tweets(req, analysis_type="sentiment"):
         'tweets': tweet_analysis,
         'labels': labels,
         'values': values,
-        'metric': metric
+        'metric': metric,
         }
         print("Tweets : ", tweet_analysis)
         if len(tweet_analysis)==0:

@@ -39,11 +39,13 @@ def get_detailed_tweets_of_topic(scrap_params,scrapper):
 def extract_tweet_text(tweets):
   tweet_texts = [tweet['text'] for tweet in tweets]
   tweet_users = [tweet['user']['name'] for tweet in tweets] 
-  return (tweet_texts,tweet_users)
+  tweet_avatars = [tweet['user']['avatar'] for tweet in tweets]
+  tweet_stats = [tweet['stats'] for tweet in tweets]
+  return (tweet_texts,tweet_users,tweet_avatars,tweet_stats)
 
 def get_tweet_texts_and_users(scrap_params,scrapper):
-  (tweet_texts,tweet_users) = extract_tweet_text(get_detailed_tweets_of_topic(scrap_params,scrapper))
-  return (tweet_texts,tweet_users)
+  (tweet_texts,tweet_users, tweet_avatars,tweet_stats) = extract_tweet_text(get_detailed_tweets_of_topic(scrap_params,scrapper))
+  return (tweet_texts,tweet_users, tweet_avatars,tweet_stats)
 
 def filter_texts(texts):
   filtered_texts = [text for text in texts if classify(text)[0] == 'en']
@@ -53,19 +55,21 @@ def get_sentiments(texts,pipe):
   sentiments = pipe(texts)
   return sentiments
 
-def organize_data(texts, sentiments, users): 
+def organize_data(texts, sentiments, users, avatars,stats): 
   l = len(texts)
   for i in range (l):
-    sentiments[i]["text"] = texts[i]
     sentiments[i]["user"] = users[i]
+    sentiments[i]["avatar"] = avatars[i]
+    sentiments[i]["text"] = texts[i]
+    sentiments[i]["stats"] = stats[i]
     sentiments[i]["score"] = round(sentiments[i]["score"]*100, 2)
   return sentiments
 
 def get_tweet_texts_and_model_labels(scrap_params,scrapper,pipe):
-  (tweet_texts,tweet_users) = get_tweet_texts_and_users(scrap_params,scrapper)
+  (tweet_texts,tweet_users,tweet_avatars,tweet_stats) = get_tweet_texts_and_users(scrap_params,scrapper)
   filtered_texts = filter_texts(tweet_texts)
   sentiments = get_sentiments(filtered_texts,pipe)
-  text_sentiments = organize_data(filtered_texts,sentiments,tweet_users)
+  text_sentiments = organize_data(filtered_texts,sentiments,tweet_users,tweet_avatars,tweet_stats)
   return text_sentiments
 
 def customize_filter_params(params):
@@ -76,9 +80,11 @@ def customize_filter_params(params):
       filter_params[key] = params[key]
     elif (key == "number"):
       filter_params[key] = int(params[key][0])
-    elif params[key][0]=='none':
-        print(key)
+    elif key == "filters" : 
+      if (params[key][0]=='none'):
         filter_params[key] = None
+      else : 
+        filter_params[key] = params[key]
     else:
       filter_params[key] = params[key][0]
   return filter_params
@@ -143,8 +149,6 @@ def get_sentiment_metrics(analysed_tweets, analysis):
 
     else:
       return {'hate': 100, 'nohate': 0}, 3.1415
-
-
 
 def fetch_and_analyse_tweets(analysis_type,params):
   pipe = pipelines[analysis_type]
