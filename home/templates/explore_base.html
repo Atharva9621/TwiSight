@@ -11,15 +11,17 @@
 <div class="dashboard">
     <div class="container w-[100%]">
         <div class="h-25 mb-3 headbox mx-auto text-center d-flex mb-2 flex-column justify-content-center">
+            <h2 class="m-4">{%block analysis%}
+                {%endblock analysis%}</h2>
             <h3 class="m-4">Search any Hashtags Here</h3>
-            <form class="d-flex mx-auto" method="post" action="/explore-tweets/sentiment" role="search">
+            {%block action%}
+            {%endblock action%}
                 <input class="form-control me-3" id="hash" name="terms" type="search" placeholder="Enter hashtag" required="true"
                     aria-label="Search">
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Filters
                 </button>
-
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                     aria-hidden="true">
@@ -43,7 +45,7 @@
 
                                     <select type="text" name="mode" class="" id="mode">
                                         <option value="hashtag" selected>Hashtag</option>
-                                        <option value="user">User</option>
+                                        {% comment %} <option value="user">User</option> {% endcomment %}
                                         <option value="term">Term</option>
                                     </select>
 
@@ -63,8 +65,8 @@
 
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Apply Filters</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Apply</button>
+                                {% comment %} <button type="button" class="btn btn-primary">Apply Filters</button> {% endcomment %}
                             </div>
                         </div>
                     </div>
@@ -89,7 +91,7 @@
                     <div class="card my-2">
                         <div class="user d-flex flex-row">
                             <span class="profile d-flex justify-content-center align-items-center mx-auto">
-                                <p class="mb-0" ><img src="https://pbs.twimg.com/profile_images/1562753500726976514/EPSUNyR3_bigger.jpg"
+                                <p class="mb-0" ><img src={{tweet.avatar}}
                                         width="42px" height="42px" alt="" class="avatar"></p>
                             </span>
                         </div>
@@ -108,15 +110,8 @@
                             <p class="tag-text">Label</p>
                             <p class="tag-text">Confidence</p>
                         </div>
-                        <div class="mx-1 my-2 w-100 d-flex justify-content-between">
-                        {% if tweet.label == 'negative' %}
-                            <p class="res-text text-danger">☹️ Negative</p>
-                        {% elif tweet.label == 'positive' %}
-                            <p class="res-text text-success" >😍 Positive</p>
-                        {% else %}
-                            <p class="res-text text-warning">😐 Neutral</p>
-                        {% endif %}                            <p class="res-text">{{tweet.score}}%</p>
-                        </div>
+                        {%block dashboard%}
+                        {%endblock dashboard%}
                     </div>
                 </div>
             </div>
@@ -136,8 +131,8 @@
             <div class="d-flex justify-content-center flex-column text-center pb-3">
                 <h3>Tweet Dashboard</h3>
             </div>
-            <h5 class="text-center">Diagnostics ❤️</h5>
-            <div class="metric">Positivity-score: ({{metric}}%) </div>
+            {%block diagnostics%}
+            {%endblock diagnostics%}
         </div>
     </div>
     <div class="d-flex justify-content-center flex-row">

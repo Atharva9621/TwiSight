@@ -1,6 +1,7 @@
 body {
     background-color: rgb(190, 190, 253);
     min-height: 100vh;
+    position: relative;
 }
 
 .glass-container {
@@ -33,3 +34,4 @@ body {
 .bg-light{
     background-color: blueviolet;
 }
+
