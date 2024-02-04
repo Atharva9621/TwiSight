@@ -15,12 +15,18 @@ def explore_tweets(req, analysis_type="sentiment"):
         labels = list(counts.keys())
         values = list(counts.values())
         context = {
+        'empty_list': False,
         'first_visit': True,
         'tweets': tweet_analysis,
         'labels': labels,
         'values': values,
         'metric': metric
         }
+        print("Tweets : ", tweet_analysis)
+        if len(tweet_analysis)==0:
+            print("Im so empty")
+            context['empty_list'] = True
+            print(context)
         return render(req, f"explore_{analysis_type}.html", context)   
     else:
         return render(req, f"explore_{analysis_type}.html", {'first_visit': False})  

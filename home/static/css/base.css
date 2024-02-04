@@ -1,5 +1,6 @@
 body {
     background-color: rgb(190, 190, 253);
+    min-height: 100vh;
 }
 
 .glass-container {
@@ -8,6 +9,9 @@ body {
     border-radius: 10px;
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Box shadow */
     backdrop-filter: blur(4px); /* Blur effect for supporting browsers */
+    width: 70%;
+    /* margin: auto; */
+
 }
 #canvas-container{
     position: fixed;

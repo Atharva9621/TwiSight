@@ -10,15 +10,77 @@
 {% block body %}
 <div class="dashboard">
     <div class="container w-[100%]">
-        <div class="h-25 headbox mx-auto text-center d-flex mb-2 flex-column justify-content-center">
+        <div class="h-25 mb-3 headbox mx-auto text-center d-flex mb-2 flex-column justify-content-center">
             <h3 class="m-4">Search any Hashtags Here</h3>
             <form class="d-flex mx-auto" method="post" action="/explore-tweets/spam" role="search">
                 <input class="form-control me-3" id="hash" name="terms" type="search" placeholder="Enter hashtag" required="true"
                     aria-label="Search">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Filters
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Filters</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="w-100 d-flex justify-content-around">
+                                    <label for="count">Count</label>
+                                    <input type="number" name="number" id="count" value="5">
+                                </div>
+                                <div class="w-100 d-flex justify-content-around">
+                                    <label for="mode">
+                                        Mode
+                                    </label>
+
+                                    <select type="text" name="mode" class="" id="mode">
+                                        <option value="hashtag" selected>Hashtag</option>
+                                        <option value="user">User</option>
+                                        <option value="term">Term</option>
+                                    </select>
+
+                                </div>
+                                <div class="w-100 d-flex justify-content-around">
+                                    <label for="filter">
+                                        filters
+                                    </label>
+
+                                    <select type="text" name="filters" class="" id="filter">
+                                        <option value="none" selected>None</option>
+                                        <option value="news">News</option>
+                                        <option value="verified">verified</option>
+                                    </select>
+
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Apply Filters</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <input class="btn btn-success" type="submit">
             </form>
         </div>
-        {% if first_visit %}
+        {% if empty_list %}
+        <div class="d-flex flex-column justify-center text-center">
+            <h1 class="text-center col-12 mt-5">Failed to Fetch</h1>
+            Please try again later
+        </div>
+        {% elif first_visit %}
+        <div class="w-100 d-grid card-box">
+        </div>
+        </div>
         <div class="d-flex tweetBox flex-wrap overflow-scroll">
             {% for tweet in tweets %}
             <div class="w-100 d-grid card-box">
@@ -27,12 +89,13 @@
                     <div class="card my-2">
                         <div class="user d-flex flex-row">
                             <span class="profile d-flex justify-content-center align-items-center mx-auto">
-                                <p>A</p>
+                                <p class="mb-0" ><img src="https://pbs.twimg.com/profile_images/1562753500726976514/EPSUNyR3_bigger.jpg"
+                                        width="42px" height="42px" alt="" class="avatar"></p>
                             </span>
                         </div>
 
                         <div class="tweet-msg">
-                            <p class="profile-name py-2">{{tweet.user}}</p>
+                            <p class="profile-name mb-0">{{tweet.user}}</p>
                             <p class="tweet-text">{{tweet.text}}
                             </p>
                         </div>
@@ -46,22 +109,23 @@
                             <p class="tag-text">Confidence</p>
                         </div>
                         <div class="mx-1 my-2 w-100 d-flex justify-content-between">
-                        {% if tweet.label == 'hate' %}
-                            <p class="res-text text-danger">☹️ Spam</p>
-                        {% else%}
-                            <p class="res-text text-success" >😍Not Spam</p>
-                        {% endif %}                            <p class="res-text">{{tweet.score}}%</p>
-                        </div>
+                            {% if tweet.label == 'hate' %}
+                                <p class="res-text text-danger">☹️ Spam</p>
+                            {% else%}
+                                <p class="res-text text-success" >😍Not Spam</p>
+                            {% endif %}                            <p class="res-text">{{tweet.score}}%</p>
+                            </div>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
-        {% endif %} 
+        {% endif %}
     </div>
 </div>
+
 {% if first_visit %}
-<div class="dashboard glass-container d-flex justify-content-center flex-row">
+<div class="dashboard glass-container d-flex justify-content-center flex-row mx-auto">
     <div class="d-flex justify-content-center flex-row">
         <div class="pb-10" style="width: 50%;">
             <canvas class="m-5" id="myPieChart" style="width: 30%; height: 30%;"></canvas>
@@ -71,14 +135,14 @@
                 <h3>Tweet Dashboard</h3>
             </div>
             <h5 class="text-center">Diagnostics ❤️</h5>
-            <div class="metric">Positivity-score: ({{metric}}%) </div>
+            <div class="metric">Spam Probability: ({{metric}}%) </div>
         </div>
     </div>
     <div class="d-flex justify-content-center flex-row">
 
     </div>
 </div>
-{% endif %}  
+{% endif %}
 <script>
     var tweetData = {
         labels: {{ labels|safe }},

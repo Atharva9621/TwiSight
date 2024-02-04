@@ -169,7 +169,7 @@ form>input{
 .footer{
     border-top: 2px solid rgb(22, 87, 125);
     bottom: 0;
-    position: absolute;
+    position: relative;
     width: 100%;
     height: 40px;
     box-shadow: -1px -1px 5px rgb(21, 21, 55);
@@ -235,3 +235,6 @@ form>input{
     background: transparent; 
   }
    
+.avatar{
+    border-radius: 50%;
+}
