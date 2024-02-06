@@ -1,7 +1,5 @@
-# Twitter Sentiment Analysis
+# TwiSight
 
-Submission for PCSB Hack-AI_Thon 
-## Setup
+### Sentiment Analysis tool for Twitter posts on a particular topic
 
-1. **Clone the Repository**: 
- https://github.com/Atharva9621/Innovators_1007.git
+
